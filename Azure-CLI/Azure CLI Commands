@@ -1,0 +1,28 @@
+# 1. Login
+az login
+
+# 2. Create a Resource Group
+az group create \
+  --name MyResourceGroup \
+  --location westus
+
+# 3. Create a Storage Account (required by Function Apps)
+az storage account create \
+  --name mystorageaccount \
+  --location westus \
+  --resource-group MyResourceGroup \
+  --sku Standard_LRS
+
+# 4. Create the Function App
+az functionapp create \
+  --resource-group MyResourceGroup \
+  --consumption-plan-location westus \
+  --runtime python \
+  --runtime-version 3.12 \
+  --functions-version 4 \
+  --name MyFunctionApp \
+  --storage-account mystorageaccount \
+  --os-type linux
+
+# 5. Deploy your code
+func azure functionapp publish MyFunctionApp
